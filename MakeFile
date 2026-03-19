@@ -1,0 +1,20 @@
+# Variables - Update these if your paths are different
+JAVA_HOME = $(shell echo %JAVA_HOME%)
+# For Windows/MSYS2 GCC
+CC = gcc
+CFLAGS = -I"$(JAVA_HOME)\include" -I"$(JAVA_HOME)\include\win32" -shared
+
+# The default target that runs when you just type 'make'
+all: prime_native.dll PrimeChecker.class
+
+# Rule to create the DLL
+prime_native.dll: PrimeChecker.c PrimeChecker.h
+	$(CC) $(CFLAGS) -o prime_native.dll PrimeChecker.c
+
+# Rule to compile Java and generate the Header at the same time
+PrimeChecker.h PrimeChecker.class: PrimeChecker.java
+	javac -h . PrimeChecker.java
+
+# Clean up generated files
+clean:
+	del *.class *.h *.dll
